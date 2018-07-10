@@ -1,7 +1,4 @@
 import {loadLevel} from './loaders.js'
-import {loadBackgroundSprites} from './sprites.js'
-import Compositor from './Compositor.js'
-import {createBackgroundLayer, createSpriteLayer} from './layers.js'
 import {createMario} from './entities.js'
 import Timer from './Timer.js'
 import Keyboard from './KeyboardState.js'
@@ -12,20 +9,14 @@ const context = canvas.getContext('2d')
 
 Promise.all([
   createMario(),
-  loadBackgroundSprites(),
   loadLevel('1-1')
-]).then(([mario, sprites, level]) => {
-  const comp = new Compositor()
-
+]).then(([mario, level]) => {
   const gravity = 2000
   mario.pos.set(32, 176)
 
-  const backgroundLayer = createBackgroundLayer(level.backgrounds, sprites)
-  const spriteLayer = createSpriteLayer(mario)
-  const timer = new Timer()
+  level.entities.add(mario)
 
-  comp.layers.push(backgroundLayer)
-  comp.layers.push(spriteLayer)
+  const timer = new Timer()
 
   const SPACE = 32
   const input = new Keyboard()
@@ -39,8 +30,8 @@ Promise.all([
   input.listenTo(window)
 
   timer.update = (deltaTime) => {
-    mario.update(deltaTime)
-    comp.draw(context)
+    level.update(deltaTime)
+    level.comp.draw(context)
     mario.vel.y += gravity * deltaTime
   }
 
