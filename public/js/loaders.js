@@ -1,5 +1,5 @@
 import Level from './Level.js'
-import {createBackgroundLayer, createSpriteLayer} from './layers.js'
+import {createBackgroundLayer, createSpriteLayer, createCollisionDebugLayer} from './layers.js'
 import {loadBackgroundSprites} from './sprites.js'
 
 export function loadImage (url) {
@@ -19,7 +19,7 @@ function createTiles(level, backgrounds) {
         for(let y = y1; y < y2; ++y) {
           level.tiles.set(x, y, {
             name: background.tile
-          });
+          })
         }
       }
     })
@@ -40,9 +40,11 @@ export function loadLevel (name) {
 
     const backgroundLayer = createBackgroundLayer(level, backgroundSprites)
     const spriteLayer = createSpriteLayer(level.entities)
+    const collisionDebugLayer = createCollisionDebugLayer(level)
 
     level.comp.layers.push(backgroundLayer)
     level.comp.layers.push(spriteLayer)
+    level.comp.layers.push(collisionDebugLayer)
 
     return level
   })
