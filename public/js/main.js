@@ -4,6 +4,7 @@ import Timer from './Timer.js'
 import {setupKeyboard} from './input.js'
 import Camera from './Camera.js'
 import {setupMouseControl} from './debug.js'
+import {createCameraLayer} from './layers.js'
 
 const canvas = document.getElementById('screen')
 const context = canvas.getContext('2d')
@@ -19,6 +20,10 @@ Promise.all([
 
   const camera = new Camera()
   const timer = new Timer()
+
+  window.camera = camera
+
+  level.comp.layers.push(createCameraLayer(camera))
 
   const keyboard = setupKeyboard(mario)
   keyboard.listenTo(window)
